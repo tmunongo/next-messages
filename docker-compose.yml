@@ -3,9 +3,9 @@ version: "3.9"
 services:
   # this service should use the web image after I build it
   web:
-    image: next-messages:dev
+    image: next-nginx:dev
     ports:
-      - "3000:3000"
+      - "3000:80"
     environment:
       NODE_ENV: development
   # this service is the database service using mongo from docker hub

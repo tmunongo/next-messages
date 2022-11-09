@@ -1,18 +1,20 @@
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
-import NavBar from "../components/NavBar";
+import Layout from "../components/Layout";
+
+type Message = {
+  name: string;
+  body: string;
+};
 
 const Home: NextPage = () => {
-  const [data, setData] = useState();
+  const [data, setData] = useState<Message[]>();
 
   useEffect(() => {
-    // setLoading(true)
     fetch("/api/posts")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        setData(data);
-        // setLoading(false)
+        setData(data.allPosts);
       })
       .catch((err) => {
         console.log(err);
@@ -20,20 +22,30 @@ const Home: NextPage = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-center m-0 w-full">
-      <div className="flex flex-col items-center justify-center w-full">
-        <div className="w-full">
-          <NavBar />
-        </div>
+    <>
+      <Layout>
         <div>
           <p className="text-2xl">Welcome</p>
           <div>
-            {data ? <p>{data.name}</p> : <p>Placeholder</p>}
-            {data ? <p>{data.body}</p> : <p>Placeholder</p>}
+            {data ? (
+              data.map((item, index) => {
+                return (
+                  <div key={index}>
+                    <p>{item.name}</p>
+                    <p>{item.body}</p>
+                  </div>
+                );
+              })
+            ) : (
+              <div>
+                <p>Name Placeholder</p>
+                <p>Message Placeholder</p>
+              </div>
+            )}
           </div>
         </div>
-      </div>
-    </div>
+      </Layout>
+    </>
   );
 };
 
